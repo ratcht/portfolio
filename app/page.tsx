@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link';
 import { Navbar, NavbarBrand, NavbarToggle, NavbarCollapse, NavbarLink } from 'flowbite-react';
@@ -14,6 +15,11 @@ import {
   FooterTitle,
 } from 'flowbite-react';
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs';
+import { Button, Modal } from 'flowbite-react';
+import { useState } from 'react';
+import { Alert } from 'flowbite-react';
+
+
 
 
 
@@ -43,6 +49,36 @@ const navbarTheme: CustomFlowbiteTheme['navbar'] = {
   },
 };
 
+function PortfolioNav() {
+  const [openModal, setOpenModal] = useState(false);
+
+
+  return (
+    <Navbar fluid rounded className='bg-transparent' theme={navbarTheme}>
+      <NavbarToggle />
+      <NavbarCollapse>
+        <NavbarLink href="#" active>
+          Home
+        </NavbarLink>
+        <NavbarLink href="#">Portfolio</NavbarLink>
+        <NavbarLink href="https://drive.google.com/file/d/1QxHEB6lnpUvCvoaC3ft4JmOKj4L3upgj/view?usp=sharing">Resume</NavbarLink>
+        <NavbarLink href="#" onClick={() => setOpenModal(true)}>Contact</NavbarLink>
+
+        <Modal show={openModal} onClose={() => setOpenModal(false)}>
+          <Modal.Header>Contact</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                Phone Number: +1 (604) 862 9137<br />
+                Email: a2alhama@uwaterloo.ca
+              </p>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </NavbarCollapse>
+    </Navbar>
+  );
+}
 
 type CardProps = {
   title: string;
@@ -69,11 +105,10 @@ function PortfolioCard(props: CardProps) {
 }
 
 
-
 function PortfolioFooter() {
   return (
-    <Footer bgDark container className="rounded-none">
-      <div className="w-full">
+    <Footer container className="rounded-none bg-transparent">
+      <div className="w-full p-5">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-16">
             <div>
@@ -85,8 +120,8 @@ function PortfolioFooter() {
             </div>
             <div>
               <FooterLinkGroup col>
-                <FooterLink href="#">Github</FooterLink>
-                <FooterLink href="#">Discord</FooterLink>
+                <FooterLink href="https://drive.google.com/file/d/1QxHEB6lnpUvCvoaC3ft4JmOKj4L3upgj/view?usp=sharing">Resume</FooterLink>
+                <FooterLink href="#">Contact</FooterLink>
               </FooterLinkGroup>
             </div>
           </div>
@@ -97,30 +132,25 @@ function PortfolioFooter() {
 }
 
 
-function PortfolioNav() {
-  return (
-    <Navbar fluid rounded className='bg-transparent' theme={navbarTheme}>
-      <NavbarToggle />
-      <NavbarCollapse>
-        <NavbarLink href="#" active>
-          Home
-        </NavbarLink>
-        <NavbarLink href="#">Portfolio</NavbarLink>
-        <NavbarLink href="#">Resume</NavbarLink>
-        <NavbarLink href="#">Contact</NavbarLink>
-      </NavbarCollapse>
-    </Navbar>
-  );
-}
+import { HiInformationCircle } from 'react-icons/hi';
+
 
 export default function Home() {
+  const [openModal, setOpenModal] = useState(true);
+  const [alertState, setAlertState] = useState("");
+
   return (
+
+
     <main>
+      <Alert color="warning" icon={HiInformationCircle} onDismiss={() => setAlertState("hidden")} className={alertState}>
+        <span className="font-medium">Alert!</span> I'm still finishing up this site, but I've deployed it anyways since it contains the links to my GitHub, LinkedIn and Resume :) Nevertheless, feel free to take a look!
+      </Alert>
       <div className="static p-5">
 
         <section id="main" className="xl:h-screen">
-          <div className="absolute left-0 top-1/2 collapse sm:visible xl:top-56 z-0">
-            <img src="/backgroundline.svg" alt="Background Line" />
+          <div className="w-screen absolute left-0 top-1/2 collapse sm:visible xl:top-56 2xl:top-44 -z-50">
+            <img src="/backgroundline.svg" alt="Background Line" style={{width: "100%"}} />
           </div>
 
           <div className="flex justify-end">
@@ -147,7 +177,7 @@ export default function Home() {
             </div>
             
             <div className="mt-10 xl:mt-20">
-              <p className="text-xl font-extralight text-center sm:text-left">I'm a student at the <span className='font-medium'>University of Waterloo</span> studying <span className='font-medium'>Computer Engineering & Mathematics</span>. I specialize in developing <span className='font-medium'>AI-powered solutions</span> for businesses and individuals. Currently, I'm exploring <span className='font-medium'>TinyML</span> and <span className='font-medium'>AI within embedded systems</span>. You can find some cool projects I've worked (and am working) on <a href="#portfolio" className="text-blue-400 underline font-medium">here</a> 😊</p>
+              <p className="text-xl font-extralight text-center sm:text-left">I'm a student at the <span className='font-medium'>University of Waterloo</span> studying <span className='font-medium'>Computer Engineering & Mathematics</span>. I specialize in developing <span className='font-medium'>AI-powered solutions</span> for businesses and individuals. Currently, I'm exploring <span className='font-medium'>TinyML</span> and <span className='font-medium'>AI within embedded systems</span>. You can find some cool projects I've worked (and am working) on <a href="#projects" className="text-blue-400 underline font-medium">here</a> 😊</p>
             </div>
 
             <div className="flex justify-center mt-56">
@@ -161,12 +191,11 @@ export default function Home() {
           <div className="px-8 py-5 sm:px-36 sm:py-10">
             <h2 className="text-xl font-medium mb-5">Recent Experience</h2>
             <div className="justify-center lg:flex lg:justify-start lg:gap-4 lg:mb-4">
-              <PortfolioCard title="1hello" description="heeelooooo" />
-              <PortfolioCard title="2hello" description="heeelooooo" />
+              <PortfolioCard title="Test" description="test" />
+              <PortfolioCard title="Test" description="test" />
             </div>
             <div className="lg:flex lg:gap-4">
-              <PortfolioCard title="3hello" description="heeelooooo" />
-              <PortfolioCard title="4hello" description="heeelooooo" />
+              <PortfolioCard title="Test" description="test" />
             </div>
           </div>
         </section>
@@ -175,12 +204,12 @@ export default function Home() {
           <div className="px-8 py-5 sm:px-36 sm:py-10">
             <h2 className="text-xl font-medium mb-5">Featured Projects</h2>
             <div className="justify-center lg:flex lg:justify-start lg:gap-4 lg:mb-4">
-              <PortfolioCard title="1hello" description="heeelooooo" />
-              <PortfolioCard title="2hello" description="heeelooooo" />
+              <PortfolioCard title="Test" description="test" />
+              <PortfolioCard title="Test" description="test" />
             </div>
             <div className="lg:flex lg:gap-4">
-              <PortfolioCard title="3hello" description="heeelooooo" />
-              <PortfolioCard title="4hello" description="heeelooooo" />
+              <PortfolioCard title="Test" description="test" />
+              <PortfolioCard title="Test" description="test" />
             </div>
           </div>
         </section>
